@@ -1,28 +1,32 @@
 {
-  "name": "difference-calculator",
-  "version": "1.0.0",
-  "description": "Difference calculator",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/iashchuk/frontend-project-lvl2.git"
-  },
-  "keywords": [
-    "hexlet",
-    "gendiff",
-    "difference",
-    "calculator"
-  ],
-  "author": "Vitalii Iashchuk",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/iashchuk/frontend-project-lvl2/issues"
-  },
-  "homepage": "https://github.com/iashchuk/frontend-project-lvl2#readme",
-  "dependencies": {
-    "commander": "^4.1.1"
-  }
+    "name": "difference-calculator",
+    "version": "1.0.0",
+    "description": "Difference calculator",
+    "main": "src/index.js",
+    "type": "module",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "bin": {
+        "gendiff": "bin/gendiff.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/iashchuk/frontend-project-lvl2.git"
+    },
+    "keywords": [
+        "hexlet",
+        "gendiff",
+        "difference",
+        "calculator"
+    ],
+    "author": "Vitalii Iashchuk",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/iashchuk/frontend-project-lvl2/issues"
+    },
+    "homepage": "https://github.com/iashchuk/frontend-project-lvl2#readme",
+    "dependencies": {
+        "commander": "^4.1.1"
+    }
 }
