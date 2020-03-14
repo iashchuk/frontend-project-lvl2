@@ -27,6 +27,7 @@
     },
     "homepage": "https://github.com/iashchuk/frontend-project-lvl2#readme",
     "dependencies": {
-        "commander": "^4.1.1"
+        "commander": "^4.1.1",
+        "lodash": "^4.17.15"
     }
 }
