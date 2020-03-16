@@ -1,8 +1,23 @@
 install:
 	npm install
 
-run:
-	npx babel-node 'bin/gendiff.js' fixtures/before.json fixtures/after.json
+run-json:
+	npx babel-node 'bin/gendiff.js' __tests__/__fixtures__/before.json __tests__/__fixtures__/after.json
+
+run-yml:
+	npx babel-node 'bin/gendiff.js' __tests__/__fixtures__/before.yml __tests__/__fixtures__/after.yml
+
+run-yaml:
+	npx babel-node 'bin/gendiff.js' __tests__/__fixtures__/before.yaml __tests__/__fixtures__/after.yaml
+
+run-ini:
+	npx babel-node 'bin/gendiff.js' __tests__/__fixtures__/before.ini __tests__/__fixtures__/after.ini
 
 lint:
 	npx eslint .
+
+test:
+	npm test
+
+test-coverage:
+	npm test -- --coverage
