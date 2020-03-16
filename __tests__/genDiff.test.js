@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { genDiff } from '../src/genDiff';
+import genDiff from '../src/genDiff';
 
 const formats = ['json', 'yml', 'yaml', 'ini'];
 const getFixturePath = (name) => path.resolve(__dirname, '__fixtures__', name);
