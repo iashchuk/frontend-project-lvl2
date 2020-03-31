@@ -34,9 +34,7 @@ describe('renderDiff', () => {
       key: 'host',
       values: ['hexlet.io', 'hexlet.io'],
     };
-    expect(renderDiff(unchangedElement)).toBe(
-      `${unchangedElement.key}: ${unchangedElement.values[0]}`,
-    );
+    expect(renderDiff(unchangedElement)).toBe(`  ${unchangedElement.key}: ${unchangedElement.values[0]}`);
   });
   it('test unknown element', () => {
     const errorElement = {
