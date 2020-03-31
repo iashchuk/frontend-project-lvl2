@@ -4,6 +4,9 @@ import _ from 'lodash';
 import path from 'path';
 import ParseFactory from './parsers';
 
+
+const space = ' ';
+
 const getData = (config) => {
   const filepath = path.resolve(config);
   const data = ParseFactory.factory(filepath);
@@ -11,7 +14,7 @@ const getData = (config) => {
 };
 
 const compareData = (data1, data2) => {
-  const keys = _.union(Object.keys(data1), Object.keys(data2));
+  const keys = _.union(_.keys(data1), _.keys(data2)).sort();
 
   const processDiff = (key) => {
     const firstValue = data1[key];
@@ -19,12 +22,18 @@ const compareData = (data1, data2) => {
 
     const info = { key, values: [firstValue, secondValue] };
 
-    if (_.has(data1, key) && !_.has(data2, key)) {
-      return { type: 'removed', ...info };
+    if (_.isObject(firstValue) && _.isObject(secondValue)) {
+      return { type: 'nested', key, values: compareData(firstValue, secondValue) };
     }
+
     if (!_.has(data1, key) && _.has(data2, key)) {
       return { type: 'added', ...info };
     }
+
+    if (_.has(data1, key) && !_.has(data2, key)) {
+      return { type: 'removed', ...info };
+    }
+
     if (firstValue !== secondValue) {
       return { type: 'changed', ...info };
     }
@@ -34,21 +43,38 @@ const compareData = (data1, data2) => {
   return keys.map(processDiff);
 };
 
-export const renderDiff = (element) => {
-  const [firstValue, secondValue] = element.values;
+
+const renderObject = (item, spaceCount) => {
+  const render = ([key, value]) => `{\n${space.repeat(spaceCount + 6)}${key}: ${value}\n${space.repeat(spaceCount + 2)}}`;
+  return _.toPairs(item).map(render);
+};
+
+export const renderDiff = (element, spaceCount) => {
+  if (element.type === 'nested') {
+    const renderNestedLine = (value) => `${space.repeat(spaceCount + 2)}${element.key}: {\n${value}\n${space.repeat(spaceCount + 2)}}`;
+    return renderNestedLine(
+      element.values.map((item) => renderDiff(item, spaceCount + 4)).join('\n'),
+    );
+  }
+
+  const [rawFirst, rawSecond] = element.values;
+  const firstValue = _.isObject(rawFirst) ? renderObject(rawFirst, spaceCount) : rawFirst;
+  const secondValue = _.isObject(rawSecond) ? renderObject(rawSecond, spaceCount) : rawSecond;
+  const renderLine = (prefix, value) => `${space.repeat(spaceCount)}${prefix}${space}${element.key}: ${value}`;
+
 
   switch (element.type) {
     case 'removed':
-      return `- ${element.key}: ${firstValue}`;
+      return renderLine('-', firstValue);
 
     case 'added':
-      return `+ ${element.key}: ${secondValue}`;
+      return renderLine('+', secondValue);
 
     case 'changed':
-      return `- ${element.key}: ${firstValue}\n+ ${element.key}: ${secondValue}`;
+      return `${renderLine('-', firstValue)}\n${renderLine('+', secondValue)}`;
 
     case 'unchanged':
-      return `${element.key}: ${firstValue}`;
+      return renderLine(' ', firstValue);
 
     default:
       throw new Error(`Unknown type: ${element.type}`);
@@ -59,7 +85,7 @@ const genDiff = (pathToFile1, pathToFile2) => {
   const before = getData(pathToFile1);
   const after = getData(pathToFile2);
   const diff = compareData(before, after);
-  return diff.map(renderDiff).join('\n');
+  return `{\n${diff.map((item) => renderDiff(item, 2)).join('\n')}\n}`;
 };
 
 export default genDiff;
