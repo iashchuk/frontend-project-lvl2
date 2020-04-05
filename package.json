@@ -2,13 +2,13 @@
   "name": "difference-calculator",
   "version": "1.0.0",
   "description": "Difference calculator",
-  "main": "src/index.js",
+  "main": "build/index.js",
   "scripts": {
     "build": "babel src --out-dir build --source-maps inline",
     "test": "jest"
   },
   "bin": {
-    "gendiff": "bin/gendiff.js"
+    "gendiff": "build/bin/gendiff.js"
   },
   "repository": {
     "type": "git",
