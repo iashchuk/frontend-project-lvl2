@@ -4,13 +4,13 @@ import {
   union, keys as getKeys, isObject, has as hasKey,
 } from 'lodash';
 import path from 'path';
-import ParseFactory from './parsers';
+import parseFactory from './parsers';
 import render from './renderers';
 
 
 const getData = (config) => {
   const filepath = path.resolve(config);
-  const data = ParseFactory.factory(filepath);
+  const data = parseFactory(filepath);
   return data;
 };
 

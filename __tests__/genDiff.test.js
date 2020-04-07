@@ -50,7 +50,7 @@ describe('should be work correct with json renderer', () => {
     expected = fs.readFileSync(getFixturePath('result.json.txt'), 'utf-8');
   });
 
-  test.each(formats.filter((item) => item !== 'ini'))('format: %s', (format) => {
+  test.each(formats)('format: %s', (format) => {
     const pathToFile1 = getFixturePath(`before.${format}`);
     const pathToFile2 = getFixturePath(`after.${format}`);
     const actual = genDiff(pathToFile1, pathToFile2, renderers.json);

@@ -1,24 +1,17 @@
 import path from 'path';
 import fs from 'fs';
-import JsonParser from './JsonParser';
-import YamlParser from './YamlParser';
-import IniParser from './IniParser';
+import yaml from 'js-yaml';
+import ini from 'ini';
 
 const parsers = {
-  yaml: YamlParser,
-  yml: YamlParser,
-  json: JsonParser,
-  ini: IniParser,
+  yaml: yaml.safeLoad,
+  yml: yaml.safeLoad,
+  json: JSON.parse,
+  ini: ini.parse,
 };
 
-export default class ParseFactory {
-  static factory(filePath) {
-    const type = path.extname(filePath).slice(1);
-    const rawData = fs.readFileSync(filePath).toString();
-
-    const parser = new parsers[type](rawData);
-    const data = parser.parse();
-
-    return data;
-  }
-}
+export default (filePath) => {
+  const type = path.extname(filePath).slice(1);
+  const rawData = fs.readFileSync(filePath).toString();
+  return parsers[type](rawData);
+};
