@@ -1,12 +1,18 @@
 // @ts-check
 
-import _ from 'lodash';
+import { isObject, toPairs } from 'lodash';
 
 const space = ' ';
 
+const prefixes = {
+  removed: '-',
+  added: '+',
+  unchanged: ' ',
+};
+
 const renderObject = (item, spaceCount) => {
   const render = ([key, value]) => `{\n${space.repeat(spaceCount + 6)}${key}: ${value}\n${space.repeat(spaceCount + 2)}}`;
-  return _.toPairs(item).map(render);
+  return toPairs(item).map(render);
 };
 
 export const renderDiff = (element, spaceCount) => {
@@ -18,23 +24,23 @@ export const renderDiff = (element, spaceCount) => {
   }
 
   const [rawFirst, rawSecond] = element.values;
-  const firstValue = _.isObject(rawFirst) ? renderObject(rawFirst, spaceCount) : rawFirst;
-  const secondValue = _.isObject(rawSecond) ? renderObject(rawSecond, spaceCount) : rawSecond;
+  const firstValue = isObject(rawFirst) ? renderObject(rawFirst, spaceCount) : rawFirst;
+  const secondValue = isObject(rawSecond) ? renderObject(rawSecond, spaceCount) : rawSecond;
   const renderLine = (prefix, value) => `${space.repeat(spaceCount)}${prefix}${space}${element.key}: ${value}`;
 
 
   switch (element.type) {
     case 'removed':
-      return renderLine('-', firstValue);
+      return renderLine(prefixes.removed, firstValue);
 
     case 'added':
-      return renderLine('+', secondValue);
+      return renderLine(prefixes.added, secondValue);
 
     case 'changed':
-      return `${renderLine('-', firstValue)}\n${renderLine('+', secondValue)}`;
+      return `${renderLine(prefixes.removed, firstValue)}\n${renderLine(prefixes.added, secondValue)}`;
 
     case 'unchanged':
-      return renderLine(' ', firstValue);
+      return renderLine(prefixes.unchanged, firstValue);
 
     default:
       throw new Error(`Unknown type: ${element.type}`);
