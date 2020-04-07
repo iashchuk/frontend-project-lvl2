@@ -11,6 +11,12 @@ const renderers = {
 
 const getFixturePath = (name) => path.resolve(__dirname, '__fixtures__', name);
 
+const getFilePaths = (format) => {
+  const pathToFile1 = getFixturePath(`before.${format}`);
+  const pathToFile2 = getFixturePath(`after.${format}`);
+  return { pathToFile1, pathToFile2 };
+};
+
 
 describe('should be work correct with pretty renderer', () => {
   let expected;
@@ -20,8 +26,7 @@ describe('should be work correct with pretty renderer', () => {
   });
 
   test.each(formats)('format: %s', (format) => {
-    const pathToFile1 = getFixturePath(`before.${format}`);
-    const pathToFile2 = getFixturePath(`after.${format}`);
+    const { pathToFile1, pathToFile2 } = getFilePaths(format);
     const actual = genDiff(pathToFile1, pathToFile2, renderers.pretty);
     expect(actual).toEqual(expected.trim());
   });
@@ -36,8 +41,7 @@ describe('should be work correct with plain renderer', () => {
   });
 
   test.each(formats)('format: %s', (format) => {
-    const pathToFile1 = getFixturePath(`before.${format}`);
-    const pathToFile2 = getFixturePath(`after.${format}`);
+    const { pathToFile1, pathToFile2 } = getFilePaths(format);
     const actual = genDiff(pathToFile1, pathToFile2, renderers.plain);
     expect(actual).toEqual(expected);
   });
@@ -51,8 +55,7 @@ describe('should be work correct with json renderer', () => {
   });
 
   test.each(formats)('format: %s', (format) => {
-    const pathToFile1 = getFixturePath(`before.${format}`);
-    const pathToFile2 = getFixturePath(`after.${format}`);
+    const { pathToFile1, pathToFile2 } = getFilePaths(format);
     const actual = genDiff(pathToFile1, pathToFile2, renderers.json);
     expect(actual).toEqual(expected);
   });
