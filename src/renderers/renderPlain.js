@@ -5,7 +5,7 @@ import { isString, isObject } from 'lodash';
 const renderPrimitive = (item) => (isString(item) ? `'${item}'` : item);
 
 
-const renderDiff = (element, initPath = '') => {
+export const renderDiff = (element, initPath = '') => {
   const [rawFirst, rawSecond] = element.values;
   const firstValue = isObject(rawFirst) ? '[complex value]' : renderPrimitive(rawFirst);
   const secondValue = isObject(rawSecond) ? '[complex value]' : renderPrimitive(rawSecond);
