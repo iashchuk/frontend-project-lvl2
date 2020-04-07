@@ -1,0 +1,134 @@
+[
+  {
+    "type": "nested",
+    "key": "common",
+    "values": [
+      {
+        "type": "added",
+        "key": "follow",
+        "values": [
+          null,
+          false
+        ]
+      },
+      {
+        "type": "unchanged",
+        "key": "setting1",
+        "values": [
+          "Value 1",
+          "Value 1"
+        ]
+      },
+      {
+        "type": "removed",
+        "key": "setting2",
+        "values": [
+          200,
+          null
+        ]
+      },
+      {
+        "type": "changed",
+        "key": "setting3",
+        "values": [
+          true,
+          {
+            "key": "value"
+          }
+        ]
+      },
+      {
+        "type": "added",
+        "key": "setting4",
+        "values": [
+          null,
+          "blah blah"
+        ]
+      },
+      {
+        "type": "added",
+        "key": "setting5",
+        "values": [
+          null,
+          {
+            "key5": "value5"
+          }
+        ]
+      },
+      {
+        "type": "nested",
+        "key": "setting6",
+        "values": [
+          {
+            "type": "unchanged",
+            "key": "key",
+            "values": [
+              "value",
+              "value"
+            ]
+          },
+          {
+            "type": "added",
+            "key": "ops",
+            "values": [
+              null,
+              "vops"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "nested",
+    "key": "group1",
+    "values": [
+      {
+        "type": "changed",
+        "key": "baz",
+        "values": [
+          "bas",
+          "bars"
+        ]
+      },
+      {
+        "type": "unchanged",
+        "key": "foo",
+        "values": [
+          "bar",
+          "bar"
+        ]
+      },
+      {
+        "type": "changed",
+        "key": "nest",
+        "values": [
+          {
+            "key": "value"
+          },
+          "str"
+        ]
+      }
+    ]
+  },
+  {
+    "type": "removed",
+    "key": "group2",
+    "values": [
+      {
+        "abc": 12345
+      },
+      null
+    ]
+  },
+  {
+    "type": "added",
+    "key": "group3",
+    "values": [
+      null,
+      {
+        "fee": 100500
+      }
+    ]
+  }
+]

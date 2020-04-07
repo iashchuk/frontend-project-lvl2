@@ -2,18 +2,58 @@ import fs from 'fs';
 import path from 'path';
 import genDiff from '../src/genDiff';
 
-const formats = ['json'];
+const formats = ['json', 'yaml', 'yml', 'ini'];
+const renderers = {
+  pretty: 'pretty',
+  plain: 'plain',
+  json: 'json',
+};
+
 const getFixturePath = (name) => path.resolve(__dirname, '__fixtures__', name);
 
-let expected;
 
-beforeAll(() => {
-  expected = fs.readFileSync(getFixturePath('result.txt'), 'utf-8');
+describe('should be work correct with pretty renderer', () => {
+  let expected;
+
+  beforeAll(() => {
+    expected = fs.readFileSync(getFixturePath('result.pretty.txt'), 'utf-8');
+  });
+
+  test.each(formats)('format: %s', (format) => {
+    const pathToFile1 = getFixturePath(`before.${format}`);
+    const pathToFile2 = getFixturePath(`after.${format}`);
+    const actual = genDiff(pathToFile1, pathToFile2, renderers.pretty);
+    expect(actual).toEqual(expected.trim());
+  });
 });
 
-test.each(formats)('%s', (format) => {
-  const pathToFile1 = getFixturePath(`before.${format}`);
-  const pathToFile2 = getFixturePath(`after.${format}`);
-  const actual = genDiff(pathToFile1, pathToFile2);
-  expect(actual).toEqual(expected.trim());
+
+describe('should be work correct with plain renderer', () => {
+  let expected;
+
+  beforeAll(() => {
+    expected = fs.readFileSync(getFixturePath('result.plain.txt'), 'utf-8');
+  });
+
+  test.each(formats)('format: %s', (format) => {
+    const pathToFile1 = getFixturePath(`before.${format}`);
+    const pathToFile2 = getFixturePath(`after.${format}`);
+    const actual = genDiff(pathToFile1, pathToFile2, renderers.plain);
+    expect(actual).toEqual(expected);
+  });
+});
+
+describe('should be work correct with json renderer', () => {
+  let expected;
+
+  beforeAll(() => {
+    expected = fs.readFileSync(getFixturePath('result.json.txt'), 'utf-8');
+  });
+
+  test.each(formats.filter((item) => item !== 'ini'))('format: %s', (format) => {
+    const pathToFile1 = getFixturePath(`before.${format}`);
+    const pathToFile2 = getFixturePath(`after.${format}`);
+    const actual = genDiff(pathToFile1, pathToFile2, renderers.json);
+    expect(actual).toEqual(expected);
+  });
 });
