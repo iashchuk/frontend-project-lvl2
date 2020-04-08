@@ -23,7 +23,7 @@
 
 `gendiff --format plain before.yaml after.yaml`
 
-[![asciicast](https://asciinema.org/a/nNvGZGuxoASph93hTzgqEtBwe.svg)](https://asciinema.org/a/nNvGZGuxoASph93hTzgqEtBwe)
+[![asciicast](https://asciinema.org/a/cC0lIFUClgbrqx8isjKkA2yvX.svg)](https://asciinema.org/a/cC0lIFUClgbrqx8isjKkA2yvX)
 
 ### Сравнение файлов (json/yaml/yml/ini): Вывод в формате 'json'
 
