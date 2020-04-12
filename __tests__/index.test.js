@@ -18,45 +18,23 @@ const getFilePaths = (format) => {
 };
 
 
-describe('should be work correct with pretty renderer', () => {
-  let expected;
+const getResult = (format) => fs.readFileSync(getFixturePath(`result.${format}.txt`), 'utf-8');
+
+describe('should be work correct', () => {
+  let expectedPretty;
+  let expectedPlain;
+  let expectedJson;
 
   beforeAll(() => {
-    expected = fs.readFileSync(getFixturePath('result.pretty.txt'), 'utf-8');
+    expectedPretty = getResult(renderers.pretty);
+    expectedPlain = getResult(renderers.plain);
+    expectedJson = getResult(renderers.json);
   });
 
   test.each(formats)('format: %s', (format) => {
     const { pathToFile1, pathToFile2 } = getFilePaths(format);
-    const actual = genDiff(pathToFile1, pathToFile2, renderers.pretty);
-    expect(actual).toEqual(expected.trim());
-  });
-});
-
-
-describe('should be work correct with plain renderer', () => {
-  let expected;
-
-  beforeAll(() => {
-    expected = fs.readFileSync(getFixturePath('result.plain.txt'), 'utf-8');
-  });
-
-  test.each(formats)('format: %s', (format) => {
-    const { pathToFile1, pathToFile2 } = getFilePaths(format);
-    const actual = genDiff(pathToFile1, pathToFile2, renderers.plain);
-    expect(actual).toEqual(expected);
-  });
-});
-
-describe('should be work correct with json renderer', () => {
-  let expected;
-
-  beforeAll(() => {
-    expected = fs.readFileSync(getFixturePath('result.json.txt'), 'utf-8');
-  });
-
-  test.each(formats)('format: %s', (format) => {
-    const { pathToFile1, pathToFile2 } = getFilePaths(format);
-    const actual = genDiff(pathToFile1, pathToFile2, renderers.json);
-    expect(actual).toEqual(expected);
+    expect(genDiff(pathToFile1, pathToFile2, renderers.pretty)).toEqual(expectedPretty);
+    expect(genDiff(pathToFile1, pathToFile2, renderers.plain)).toEqual(expectedPlain);
+    expect(genDiff(pathToFile1, pathToFile2, renderers.json)).toEqual(expectedJson);
   });
 });
