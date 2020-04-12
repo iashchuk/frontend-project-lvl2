@@ -15,6 +15,12 @@ const renderObject = (item, spaceCount) => {
   return toPairs(item).map(render);
 };
 
+const formatValues = (values, spaceCount) => {
+  const func = (value) => (isObject(value) ? renderObject(value, spaceCount) : value);
+  return values.map(func);
+};
+
+
 export const renderDiff = (element, spaceCount) => {
   if (element.type === 'nested') {
     const renderNestedLine = (value) => `${space.repeat(spaceCount + 2)}${element.key}: {\n${value}\n${space.repeat(spaceCount + 2)}}`;
@@ -23,9 +29,7 @@ export const renderDiff = (element, spaceCount) => {
     );
   }
 
-  const [rawFirst, rawSecond] = element.values;
-  const firstValue = isObject(rawFirst) ? renderObject(rawFirst, spaceCount) : rawFirst;
-  const secondValue = isObject(rawSecond) ? renderObject(rawSecond, spaceCount) : rawSecond;
+  const [firstValue, secondValue] = formatValues(element.values, spaceCount);
   const renderLine = (prefix, value) => `${space.repeat(spaceCount)}${prefix}${space}${element.key}: ${value}`;
 
 
