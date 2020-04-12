@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import genDiff from '../src/genDiff';
+import genDiff from '../src';
 
 const formats = ['json', 'yaml', 'yml', 'ini'];
 const renderers = {

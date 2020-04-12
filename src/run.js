@@ -1,6 +1,6 @@
 import process from 'process';
 import commander from 'commander';
-import genDiff from './genDiff';
+import genDiff from './index';
 
 const program = new commander.Command();
 
