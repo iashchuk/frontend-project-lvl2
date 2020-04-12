@@ -2,7 +2,7 @@
   {
     "type": "nested",
     "key": "common",
-    "values": [
+    "children": [
       {
         "type": "added",
         "key": "follow",
@@ -58,7 +58,7 @@
       {
         "type": "nested",
         "key": "setting6",
-        "values": [
+        "children": [
           {
             "type": "unchanged",
             "key": "key",
@@ -82,7 +82,7 @@
   {
     "type": "nested",
     "key": "group1",
-    "values": [
+    "children": [
       {
         "type": "changed",
         "key": "baz",

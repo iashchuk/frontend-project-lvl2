@@ -6,15 +6,17 @@ const renderPrimitive = (item) => (isString(item) ? `'${item}'` : item);
 
 
 export const renderDiff = (element, initPath = '') => {
+  const path = [initPath, element.key].filter(isString).join('.');
+
+  if (element.type === 'nested') {
+    return element.children.map((item) => renderDiff(item, path)).filter(Boolean).join('\n');
+  }
   const [rawFirst, rawSecond] = element.values;
   const firstValue = isObject(rawFirst) ? '[complex value]' : renderPrimitive(rawFirst);
   const secondValue = isObject(rawSecond) ? '[complex value]' : renderPrimitive(rawSecond);
-  const path = [initPath, element.key].filter(isString).join('.');
+
 
   switch (element.type) {
-    case 'nested':
-      return element.values.map((item) => renderDiff(item, path)).filter(Boolean).join('\n');
-
     case 'removed':
       return `Property '${path}' was removed`;
 

@@ -19,7 +19,7 @@ export const renderDiff = (element, spaceCount) => {
   if (element.type === 'nested') {
     const renderNestedLine = (value) => `${space.repeat(spaceCount + 2)}${element.key}: {\n${value}\n${space.repeat(spaceCount + 2)}}`;
     return renderNestedLine(
-      element.values.map((item) => renderDiff(item, spaceCount + 4)).join('\n'),
+      element.children.map((item) => renderDiff(item, spaceCount + 4)).join('\n'),
     );
   }
 

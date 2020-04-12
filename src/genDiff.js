@@ -24,7 +24,7 @@ const compareData = (data1, data2) => {
     const info = { key, values: [firstValue, secondValue] };
 
     if (isObject(firstValue) && isObject(secondValue)) {
-      return { type: 'nested', key, values: compareData(firstValue, secondValue) };
+      return { type: 'nested', key, children: compareData(firstValue, secondValue) };
     }
 
     if (!hasKey(data1, key) && hasKey(data2, key)) {
