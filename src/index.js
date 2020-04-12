@@ -1,16 +1,18 @@
 // @ts-check
-
+import path from 'path';
+import fs from 'fs';
 import {
   union, keys as getKeys, isObject, has as hasKey,
 } from 'lodash';
-import path from 'path';
 import parseFactory from './parsers';
 import render from './renderers';
 
 
 const getData = (config) => {
   const filepath = path.resolve(config);
-  const data = parseFactory(filepath);
+  const type = path.extname(filepath).slice(1);
+  const rawData = fs.readFileSync(filepath).toString();
+  const data = parseFactory(type, rawData);
   return data;
 };
 
