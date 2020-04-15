@@ -15,24 +15,27 @@ const renderObject = (item, spaceCount) => {
   return toPairs(item).map(render);
 };
 
-const formatValues = (values, spaceCount) => {
-  const func = (value) => (isObject(value) ? renderObject(value, spaceCount) : value);
-  return values.map(func);
+const formatValue = (value, spaceCount) => {
+  if (isObject(value)) {
+    return renderObject(value, spaceCount);
+  }
+  return value;
 };
 
 
 export const renderDiff = (diff, spaceCount) => {
   const iter = (element) => {
-    if (element.type === 'nested') {
-      const renderNestedLine = (value) => `${space.repeat(spaceCount + 2)}${element.key}: {\n${value}\n${space.repeat(spaceCount + 2)}}`;
-      return renderNestedLine(renderDiff(element.children, spaceCount + 4));
-    }
+    const firstValue = formatValue(element.firstValue, spaceCount);
+    const secondValue = formatValue(element.secondValue, spaceCount);
 
-    const [firstValue, secondValue] = formatValues(element.values, spaceCount);
     const renderLine = (prefix, value) => `${space.repeat(spaceCount)}${prefix}${space}${element.key}: ${value}`;
+    const renderNestedLine = (value) => `${space.repeat(spaceCount + 2)}${element.key}: {\n${value}\n${space.repeat(spaceCount + 2)}}`;
 
 
     switch (element.type) {
+      case 'nested':
+        return renderNestedLine(renderDiff(element.children, spaceCount + 4));
+
       case 'removed':
         return renderLine(prefixes.removed, firstValue);
 

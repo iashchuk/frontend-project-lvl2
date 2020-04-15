@@ -2,21 +2,18 @@
 import { isString, isObject } from 'lodash';
 
 const renderPrimitive = (item) => (isString(item) ? `'${item}'` : item);
-
-const formatValues = (values) => values.map((value) => (isObject(value) ? '[complex value]' : renderPrimitive(value)));
-
+const formatValue = (value) => (isObject(value) ? '[complex value]' : renderPrimitive(value));
 
 export const renderDiff = (diff, initPath = '') => {
   const iter = (element) => {
-    const path = [initPath, element.key].filter(Boolean).join('.');
-
-    if (element.type === 'nested') {
-      return renderDiff(element.children, path);
-    }
-
-    const [firstValue, secondValue] = formatValues(element.values);
+    const path = initPath ? `${initPath}.${element.key}` : element.key;
+    const firstValue = formatValue(element.firstValue);
+    const secondValue = formatValue(element.secondValue);
 
     switch (element.type) {
+      case 'nested':
+        return renderDiff(element.children, path);
+
       case 'removed':
         return `Property '${path}' was removed`;
 
@@ -27,7 +24,7 @@ export const renderDiff = (diff, initPath = '') => {
         return `Property '${path}' was updated. From ${firstValue} to ${secondValue}`;
 
       case 'unchanged':
-        return '';
+        return null;
 
       default:
         throw new Error(`Unknown type: ${element.type}`);
