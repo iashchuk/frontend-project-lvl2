@@ -1,6 +1,6 @@
 // @ts-check
 
-import { isObject, toPairs } from 'lodash';
+import _ from 'lodash';
 
 const space = ' ';
 
@@ -12,11 +12,11 @@ const prefixes = {
 
 const renderObject = (item, spaceCount) => {
   const render = ([key, value]) => `{\n${space.repeat(spaceCount + 6)}${key}: ${value}\n${space.repeat(spaceCount + 2)}}`;
-  return toPairs(item).map(render);
+  return _.toPairs(item).map(render);
 };
 
 const formatValue = (value, spaceCount) => {
-  if (isObject(value)) {
+  if (_.isObject(value)) {
     return renderObject(value, spaceCount);
   }
   return value;

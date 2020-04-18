@@ -1,7 +1,7 @@
 // @ts-check
 import path from 'path';
 import fs from 'fs';
-import { union, isObject, has as hasKey } from 'lodash';
+import _ from 'lodash';
 import parseFactory from './parsers';
 import render from './renderers';
 
@@ -15,21 +15,21 @@ const getData = (config) => {
 };
 
 const compareData = (data1, data2) => {
-  const keys = union(Object.keys(data1), Object.keys(data2)).sort();
+  const keys = _.union(Object.keys(data1), Object.keys(data2)).sort();
 
   const processDiff = (key) => {
     const firstValue = data1[key];
     const secondValue = data2[key];
 
-    if (isObject(firstValue) && isObject(secondValue)) {
+    if (_.isObject(firstValue) && _.isObject(secondValue)) {
       return { type: 'nested', key, children: compareData(firstValue, secondValue) };
     }
 
-    if (!hasKey(data1, key) && hasKey(data2, key)) {
+    if (!_.has(data1, key) && _.has(data2, key)) {
       return { type: 'added', key, secondValue };
     }
 
-    if (hasKey(data1, key) && !hasKey(data2, key)) {
+    if (_.has(data1, key) && !_.has(data2, key)) {
       return { type: 'removed', key, firstValue };
     }
 

@@ -1,8 +1,8 @@
 // @ts-check
-import { isString, isObject } from 'lodash';
+import _ from 'lodash';
 
-const renderPrimitive = (item) => (isString(item) ? `'${item}'` : item);
-const formatValue = (value) => (isObject(value) ? '[complex value]' : renderPrimitive(value));
+const renderPrimitive = (item) => (_.isString(item) ? `'${item}'` : item);
+const formatValue = (value) => (_.isObject(value) ? '[complex value]' : renderPrimitive(value));
 
 export const renderDiff = (diff, initPath = '') => {
   const iter = (element) => {
