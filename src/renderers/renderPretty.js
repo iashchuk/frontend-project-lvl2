@@ -3,6 +3,7 @@
 import _ from 'lodash';
 
 const space = ' ';
+const tabLength = 4;
 
 const prefixes = {
   removed: '-',
@@ -11,51 +12,50 @@ const prefixes = {
 };
 
 const renderObject = (item, spaceCount) => {
-  const render = ([key, value]) => `{\n${space.repeat(spaceCount + 6)}${key}: ${value}\n${space.repeat(spaceCount + 2)}}`;
+  const render = ([key, value]) => `{\n${space.repeat(spaceCount + tabLength)}${key}: ${value}\n${space.repeat(spaceCount)}}`;
   return _.toPairs(item).map(render);
 };
 
-const formatValue = (value, spaceCount) => {
-  if (_.isObject(value)) {
-    return renderObject(value, spaceCount);
-  }
-  return value;
-};
 
+export const renderDiff = (diff, depth = 0) => {
+  const spaceCount = tabLength + depth * tabLength;
 
-export const renderDiff = (diff, spaceCount) => {
-  const iter = (element) => {
-    const firstValue = formatValue(element.firstValue, spaceCount);
-    const secondValue = formatValue(element.secondValue, spaceCount);
+  const iter = ({
+    firstValue, secondValue, type, key, children,
+  }) => {
+    const value1 = _.isObject(firstValue) ? renderObject(firstValue, spaceCount) : firstValue;
+    const value2 = _.isObject(secondValue) ? renderObject(secondValue, spaceCount) : secondValue;
 
-    const renderLine = (prefix, value) => `${space.repeat(spaceCount)}${prefix}${space}${element.key}: ${value}`;
-    const renderNestedLine = (value) => `${space.repeat(spaceCount + 2)}${element.key}: {\n${value}\n${space.repeat(spaceCount + 2)}}`;
+    const renderLine = (prefix, value) => {
+      const sign = `${prefix}${space}`;
+      return `${space.repeat(spaceCount - sign.length)}${sign}${key}: ${value}`;
+    };
+    const renderNestedLine = (value) => `${space.repeat(spaceCount)}${key}: {\n${value}\n${space.repeat(spaceCount)}}`;
 
-
-    switch (element.type) {
+    switch (type) {
       case 'nested':
-        return renderNestedLine(renderDiff(element.children, spaceCount + 4));
+        return renderNestedLine(renderDiff(children, depth + 1));
 
       case 'removed':
-        return renderLine(prefixes.removed, firstValue);
+        return renderLine(prefixes.removed, value1);
 
       case 'added':
-        return renderLine(prefixes.added, secondValue);
+        return renderLine(prefixes.added, value2);
 
       case 'changed':
-        return `${renderLine(prefixes.removed, firstValue)}\n${renderLine(prefixes.added, secondValue)}`;
+        return `${renderLine(prefixes.removed, value1)}\n${renderLine(prefixes.added, value2)}`;
 
       case 'unchanged':
-        return renderLine(prefixes.unchanged, firstValue);
+        return renderLine(prefixes.unchanged, value1);
 
       default:
-        throw new Error(`Unknown type: ${element.type}`);
+        throw new Error(`Unknown type: ${type}`);
     }
   };
 
   return diff.map(iter).join('\n');
 };
 
-const renderPretty = (diff) => `{\n${renderDiff(diff, 2)}\n}`;
+const renderPretty = (diff) => `{\n${renderDiff(diff)}\n}`;
 
 export default renderPretty;
