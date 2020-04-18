@@ -1,33 +1,43 @@
 // @ts-check
 import _ from 'lodash';
 
-const renderPrimitive = (item) => (_.isString(item) ? `'${item}'` : item);
-const formatValue = (value) => (_.isObject(value) ? '[complex value]' : renderPrimitive(value));
+
+const formatValue = (value) => {
+  if (_.isString(value)) {
+    return `'${value}'`;
+  }
+  if (_.isObject(value)) {
+    return '[complex value]';
+  }
+  return value;
+};
 
 export const renderDiff = (diff, initPath = '') => {
-  const iter = (element) => {
-    const path = initPath ? `${initPath}.${element.key}` : element.key;
-    const firstValue = formatValue(element.firstValue);
-    const secondValue = formatValue(element.secondValue);
+  const iter = ({
+    key, type, firstValue, secondValue, children,
+  }) => {
+    const path = initPath ? `${initPath}.${key}` : key;
+    const value1 = formatValue(firstValue);
+    const value2 = formatValue(secondValue);
 
-    switch (element.type) {
+    switch (type) {
       case 'nested':
-        return renderDiff(element.children, path);
+        return renderDiff(children, path);
 
       case 'removed':
         return `Property '${path}' was removed`;
 
       case 'added':
-        return `Property '${path}' was added with value: ${secondValue}`;
+        return `Property '${path}' was added with value: ${value2}`;
 
       case 'changed':
-        return `Property '${path}' was updated. From ${firstValue} to ${secondValue}`;
+        return `Property '${path}' was updated. From ${value1} to ${value2}`;
 
       case 'unchanged':
         return null;
 
       default:
-        throw new Error(`Unknown type: ${element.type}`);
+        throw new Error(`Unknown type: ${type}`);
     }
   };
 

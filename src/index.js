@@ -6,8 +6,8 @@ import parseFactory from './parsers';
 import render from './renderers';
 
 
-const getData = (config) => {
-  const filepath = path.resolve(config);
+const getData = (pathToFile) => {
+  const filepath = path.resolve(pathToFile);
   const type = path.extname(filepath).slice(1);
   const rawData = fs.readFileSync(filepath).toString();
   const data = parseFactory(type, rawData);
