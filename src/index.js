@@ -2,7 +2,7 @@
 import path from 'path';
 import fs from 'fs';
 import _ from 'lodash';
-import parseFactory from './parsers';
+import parse from './parsers';
 import render from './renderers';
 
 
@@ -10,7 +10,7 @@ const getData = (pathToFile) => {
   const filepath = path.resolve(pathToFile);
   const type = path.extname(filepath).slice(1);
   const rawData = fs.readFileSync(filepath).toString();
-  const data = parseFactory(type, rawData);
+  const data = parse(type, rawData);
   return data;
 };
 
@@ -22,11 +22,11 @@ const compareData = (data1, data2) => {
     const secondValue = data2[key];
 
 
-    if (!_.has(data1, key) && _.has(data2, key)) {
+    if (!_.has(data1, key)) {
       return { type: 'added', key, secondValue };
     }
 
-    if (_.has(data1, key) && !_.has(data2, key)) {
+    if (!_.has(data2, key)) {
       return { type: 'removed', key, firstValue };
     }
 

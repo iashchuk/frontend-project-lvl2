@@ -11,9 +11,13 @@ const prefixes = {
   unchanged: ' ',
 };
 
-const renderObject = (item, spaceCount) => {
+
+const stringify = (element, spaceCount) => {
+  if (!_.isObject(element)) {
+    return element;
+  }
   const render = ([key, value]) => `{\n${space.repeat(spaceCount + tabLength)}${key}: ${value}\n${space.repeat(spaceCount)}}`;
-  return _.toPairs(item).map(render);
+  return Object.entries(element).map(render);
 };
 
 
@@ -23,8 +27,8 @@ export const renderDiff = (diff, depth = 0) => {
   const iter = ({
     firstValue, secondValue, type, key, children,
   }) => {
-    const value1 = _.isObject(firstValue) ? renderObject(firstValue, spaceCount) : firstValue;
-    const value2 = _.isObject(secondValue) ? renderObject(secondValue, spaceCount) : secondValue;
+    const value1 = stringify(firstValue, spaceCount);
+    const value2 = stringify(secondValue, spaceCount);
 
     const renderLine = (prefix, value) => {
       const sign = `${prefix}${space}`;

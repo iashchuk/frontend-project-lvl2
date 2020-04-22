@@ -12,11 +12,11 @@ const formatValue = (value) => {
   return value;
 };
 
-export const renderDiff = (diff, initPath = '') => {
+export const renderDiff = (diff, basePath = []) => {
   const iter = ({
     key, type, firstValue, secondValue, children,
   }) => {
-    const path = initPath ? `${initPath}.${key}` : key;
+    const path = [...basePath, key];
     const value1 = formatValue(firstValue);
     const value2 = formatValue(secondValue);
 
@@ -25,13 +25,13 @@ export const renderDiff = (diff, initPath = '') => {
         return renderDiff(children, path);
 
       case 'removed':
-        return `Property '${path}' was removed`;
+        return `Property '${path.join('.')}' was removed`;
 
       case 'added':
-        return `Property '${path}' was added with value: ${value2}`;
+        return `Property '${path.join('.')}' was added with value: ${value2}`;
 
       case 'changed':
-        return `Property '${path}' was updated. From ${value1} to ${value2}`;
+        return `Property '${path.join('.')}' was updated. From ${value1} to ${value2}`;
 
       case 'unchanged':
         return null;
