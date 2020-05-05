@@ -1,8 +1,9 @@
 // @ts-check
 import _ from 'lodash';
+import { DiffType } from '..';
 
 
-const formatValue = (value) => {
+const formatValue = (value: any) => {
   if (_.isString(value)) {
     return `'${value}'`;
   }
@@ -12,10 +13,10 @@ const formatValue = (value) => {
   return value;
 };
 
-export const renderDiff = (diff, ancestors = []) => {
+export const renderDiff = (diff: DiffType[], ancestors: string[] = []): string => {
   const iter = ({
     key, type, firstValue, secondValue, children,
-  }) => {
+  }: any) => {
     const path = [...ancestors, key];
     const value1 = formatValue(firstValue);
     const value2 = formatValue(secondValue);
@@ -44,6 +45,6 @@ export const renderDiff = (diff, ancestors = []) => {
   return diff.map(iter).filter(Boolean).join('\n');
 };
 
-const renderPlain = (diff) => renderDiff(diff);
+const renderPlain = (diff: DiffType[]) => renderDiff(diff);
 
 export default renderPlain;
