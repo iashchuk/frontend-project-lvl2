@@ -1,14 +1,16 @@
 {
   "compilerOptions": {
+    "target": "es2019",
     "strict": true,
     "module": "commonjs",
     "jsx": "preserve",
     "esModuleInterop": true,
     "sourceMap": true,
     "allowJs": true,
-    "lib": ["es6", "dom"],
+    "lib": ["es2019", "esnext", "dom"],
     "rootDir": "src",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "keyofStringsOnly": true
   },
   "exclude": ["node_modules", "build", "coverage", "*.js"]
 }

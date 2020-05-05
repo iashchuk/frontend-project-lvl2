@@ -6,7 +6,7 @@ import parse from './parsers';
 import render from './renderers';
 
 
-const getData = (pathToFile) => {
+const getData = (pathToFile: string) => {
   const filepath = path.resolve(pathToFile);
   const type = path.extname(filepath).slice(1);
   const rawData = fs.readFileSync(filepath).toString();
@@ -14,10 +14,20 @@ const getData = (pathToFile) => {
   return data;
 };
 
-const compareData = (data1, data2) => {
+export interface DiffType {
+    type: string;
+    key: string | number,
+    firstValue?: any;
+    secondValue?: any;
+    children?: DiffType[]
+}
+
+type Data={[key:string]:any}
+
+const compareData = (data1: Data, data2: Data):DiffType[] => {
   const keys = _.union(Object.keys(data1), Object.keys(data2)).sort();
 
-  const processDiff = (key) => {
+  const processDiff = (key: keyof Data): DiffType => {
     const firstValue = data1[key];
     const secondValue = data2[key];
 
@@ -49,7 +59,7 @@ const compareData = (data1, data2) => {
 };
 
 
-const genDiff = (pathToFile1, pathToFile2, format) => {
+const genDiff = (pathToFile1: string, pathToFile2: string, format: string): string => {
   const data1 = getData(pathToFile1);
   const data2 = getData(pathToFile2);
   const diff = compareData(data1, data2);
